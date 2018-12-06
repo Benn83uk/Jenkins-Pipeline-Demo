@@ -4,12 +4,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building.. (Branch is: ' + $BRANCH_NAME + ')'
+                echo 'Building.. (Branch is: ' + $env.BRANCH_NAME + ')'
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing.. (Branch is: ${env.BRANCH_NAME}'
             }
         }
         stage('Deploy') {
