@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-				printenv
+				sh 'printenv'
                 echo 'Building.. (Branch is: ' + $env.BRANCH_NAME + ')'
             }
         }
