@@ -5,12 +5,12 @@ pipeline {
         stage('Build') {
             steps {
 				sh 'printenv'
-                echo 'Building.. (Branch is: ' + $BRANCH_NAME + ')'
+                echo "Building.. (Branch is: ${env.BRANCH_NAME}"
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing.. (Branch is: ${BRANCH_NAME}'
+                echo "Testing.."
             }
         }
         stage('Deploy') {
