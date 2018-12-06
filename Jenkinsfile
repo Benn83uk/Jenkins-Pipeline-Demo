@@ -16,16 +16,22 @@ pipeline {
 		    when {
 				branch 'develop'
 			}
+			environment {
+				DEPLOY_TO="development_server"
+			}
             steps {
-                echo 'Deploying to Dev....'
+                echo "Deploying to Dev (${env.DEPLOY_TO})...."
             }
         }
 		stage('Deploy to prod') {
 		    when {
 				branch 'master'
 			}
+			environment {
+				DEPLOY_TO="production_server"
+			}
             steps {
-                echo 'Deploying to Prod....'
+                echo 'Deploying to Prod (${env.DEPLOY_TO})....'
             }
         }
     }
