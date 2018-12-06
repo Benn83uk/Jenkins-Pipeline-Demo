@@ -4,8 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-				sh 'printenv'
-                echo "Building.. (Branch is: ${env.BRANCH_NAME}"
+                echo "Building.. (Branch is: ${env.BRANCH_NAME})"
             }
         }
         stage('Test') {
@@ -13,9 +12,20 @@ pipeline {
                 echo "Testing.."
             }
         }
-        stage('Deploy') {
+        stage('Deploy to dev') {
+		    when {
+				branch 'develop'
+			}
             steps {
-                echo 'Deploying....'
+                echo 'Deploying to Dev....'
+            }
+        }
+		stage('Deploy to prod') {
+		    when {
+				branch 'master'
+			}
+            steps {
+                echo 'Deploying to Prod....'
             }
         }
     }
