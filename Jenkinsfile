@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'Building.. (Branch is: $BRANCH_NAME)'
             }
         }
         stage('Test') {
