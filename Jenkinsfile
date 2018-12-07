@@ -12,11 +12,6 @@ pipeline {
                 echo "Testing.."
             }
         }
-		stage('Approval') {
-			steps {
-				input message: "Approve build?" submitter: "admin_group"
-			}
-		}
         stage('Deploy to dev') {
 		    when {
 				branch 'develop'
@@ -36,6 +31,7 @@ pipeline {
 				DEPLOY_TO="production_server"
 			}
             steps {
+				input message: "Approve build for deployment to Production?"
                 echo "Deploying to Prod (${env.DEPLOY_TO})...."
             }
         }
