@@ -2,19 +2,21 @@ pipeline {
     agent any
 	
 	environment {
-		REPO_EMAIL = 'ci@example.com'
-		REPO_USERNAME = 'examle.com'
+		GITHUB_ACCESS_TOKEN = credentials('benn83-github-public-token')
+		REPO_URL = 'github.com/Benn83uk/Jenkins-Pipeline-Demo.git'
 	}
 
     stages {
         stage('Build') {
             steps {
                 echo "Building.. (Branch is: ${env.BRANCH_NAME})"
+				//TODO: add command for Building (eg, 'mvn package')
             }
         }
         stage('Unit Test') {
             steps {
                 echo "Running Unit Tests.."
+				//TODO: add command for Running Unit Test (eg, 'mvn test').
             }
         }
         stage('Deploy to dev') {
@@ -23,11 +25,13 @@ pipeline {
 			}
             steps {
                 echo "Deploying to (${env.DEPLOY_TO})...."
+				//TODO: add commands for Deploying to your development environment
             }
         }
 		stage('Integration Test') {
             steps {
                 echo "Running Integration Tests.."
+				//TODO: add command for running Integration tests
             }
         }
         stage('Deploy to UAT') {
@@ -36,14 +40,12 @@ pipeline {
 			}
 			environment {
 				DEPLOY_TO="uat_server"
-				GITHUB_ACCESS_TOKEN = credentials('benn83-github-public-token')
 			}
             steps {
-				sshagent (credentials: ['benn83-github-public-token']) {
-					sh "git tag -a uat_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to UAT\""
-					sh("git push https://${env.GITHUB_ACCESS_TOKEN}@github.com/Benn83uk/Jenkins-Pipeline-Demo.git --tags")
-				}
+				sh "git tag -a uat_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to UAT\""
+				sh("git push https://${env.GITHUB_ACCESS_TOKEN}@${env.REPO_URL} --tags")
                 echo "Deploying to (${env.DEPLOY_TO})...."
+				//TODO: add commands for Deploying to your UAT environment
             }
         }
 		stage('Deploy to prod') {
@@ -54,10 +56,13 @@ pipeline {
 				DEPLOY_TO="production_server"
 			}
             steps {
+				emailext subject: "Approve Build" body: "Approve build with link" from: "jenkins@paconsulting.com"
 				input message: "Approve build for deployment to Production?"
+				
 				sh "git tag -a prod_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to Production\""
-				sh "git push --tags"
+				sh("git push https://${env.GITHUB_ACCESS_TOKEN}@${env.REPO_URL} --tags")
                 echo "Deploying to (${env.DEPLOY_TO})...."
+				//TODO: add commands for Deploying to your Production environment
             }
         }
     }
