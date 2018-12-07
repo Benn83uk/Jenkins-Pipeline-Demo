@@ -1,5 +1,10 @@
 pipeline {
     agent any
+	
+	environment {
+		REPO_EMAIL = 'ci@example.com'
+		REPO_USERNAME = 'examle.com'
+	}
 
     stages {
         stage('Build') {
@@ -33,8 +38,10 @@ pipeline {
 				DEPLOY_TO="uat_server"
 			}
             steps {
-				sh "git tag -a uat_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to UAT\""
-				sh "git push --tags"
+				sshagent (credentials: ['ben-pa-github']) {
+					sh "git tag -a uat_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to UAT\""
+					sh("git push --tags")
+				}
                 echo "Deploying to (${env.DEPLOY_TO})...."
             }
         }
