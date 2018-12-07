@@ -4,6 +4,7 @@ pipeline {
 	environment {
 		GITHUB_ACCESS_TOKEN = credentials('benn83-github-public-token')
 		REPO_URL = 'github.com/Benn83uk/Jenkins-Pipeline-Demo.git'
+		NOTIFY_FOR_APPROVAL = 'ben.noble@paconsulting.com'
 	}
 
     stages {
@@ -56,7 +57,7 @@ pipeline {
 				DEPLOY_TO="production_server"
 			}
             steps {
-				mail subject: "Approve Build", body: "Approve build with link", from: "jenkins@paconsulting.com"
+				mail subject: "Approve Build", body: "Approve build with link", from: "jenkins@paconsulting.com", to:"${NOTIFY_FOR_APPROVAL}"
 				input message: "Approve build for deployment to Production?"
 				
 				sh "git tag -a prod_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to Production\""
