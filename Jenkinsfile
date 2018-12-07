@@ -13,7 +13,7 @@ pipeline {
             }
         }
 		stage('Approval') {
-			stepd {
+			steps {
 				input message: "Approve build?" submitter: "admin_group"
 			}
 		}
