@@ -56,7 +56,7 @@ pipeline {
 				DEPLOY_TO="production_server"
 			}
             steps {
-				emailext subject: "Approve Build" body: "Approve build with link" from: "jenkins@paconsulting.com"
+				emailext subject: "Approve Build", body: "Approve build with link", from: "jenkins@paconsulting.com"
 				input message: "Approve build for deployment to Production?"
 				
 				sh "git tag -a prod_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to Production\""
