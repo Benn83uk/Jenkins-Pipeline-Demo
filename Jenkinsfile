@@ -36,11 +36,12 @@ pipeline {
 			}
 			environment {
 				DEPLOY_TO="uat_server"
+				GITHUB_ACCESS_TOKEN = credentials('benn83-github-public-token')
 			}
             steps {
-				sshagent (credentials: ['ben-pa-github']) {
+				sshagent (credentials: ['benn83-github-public-token']) {
 					sh "git tag -a uat_build_${env.BUILD_NUMBER} -m \"Tagging prior to deployment to UAT\""
-					sh("git push --tags")
+					sh("git push https://${env.GITHUB_ACCESS_TOKEN}@github.com/Benn83uk/Jenkins-Pipeline-Demo.git --tags")
 				}
                 echo "Deploying to (${env.DEPLOY_TO})...."
             }
@@ -60,4 +61,4 @@ pipeline {
             }
         }
     }
-}
+} 
